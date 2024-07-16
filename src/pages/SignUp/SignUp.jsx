@@ -28,7 +28,19 @@ const SignUp = () => {
     const email = form.email.value;
     const phone = form.phone.value;
     const pin = form.pin.value;
-    console.log(name, email, phone,pin)
+    console.log(name, email, phone, pin);
+
+    try{
+        setLoading(true)
+        // user registration
+        
+    }
+    catch(error){
+        console.error(error)
+    } finally{ 
+        setLoading(false)
+    }
+    
   };
 
   return (
