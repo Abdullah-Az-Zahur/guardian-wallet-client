@@ -1,7 +1,10 @@
+import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { axiosSecure } from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -12,6 +15,18 @@ const SignUp = () => {
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { muateAsync } = useMutation({
+    mutationFn: async (userData) => {
+      const { data } = await axiosSecure.post(`/user`, userData);
+      return data;
+    },
+    onSuccess: () => {
+      console.log("Create User Successfully");
+      toast.success("User created successfully");
+      navigate("/");
+    },
+  });
 
   const handlePinChange = (e) => {
     const value = e.target.value;
@@ -28,19 +43,24 @@ const SignUp = () => {
     const email = form.email.value;
     const phone = form.phone.value;
     const pin = form.pin.value;
-    console.log(name, email, phone, pin);
 
-    try{
-        setLoading(true)
-        // user registration
-        
+    try {
+      setLoading(true);
+      // user registration
+      const userData = {
+        name,
+        email,
+        phone,
+        pin,
+      };
+      console.log(userData);
+      // post user registration
+      await muateAsync(userData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    catch(error){
-        console.error(error)
-    } finally{ 
-        setLoading(false)
-    }
-    
   };
 
   return (
