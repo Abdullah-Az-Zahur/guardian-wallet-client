@@ -1,6 +1,9 @@
+import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { axiosSecure } from "../../hooks/useAxiosSecure";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +14,18 @@ const Login = () => {
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (userData) => {
+      const { data } = await axiosSecure.post(`/login`, userData);
+      return data;
+    },
+    onSuccess: () => {
+      console.log("User Login Successfully");
+      toast.success("User Login successfully");
+      navigate("/");
+    },
+  });
 
   const handlePinChange = (e) => {
     const value = e.target.value;
@@ -24,9 +39,20 @@ const Login = () => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
-    // const phone = form.phone.value;
     const pin = form.pin.value;
     console.log(email, pin);
+    try {
+      setLoading(true);
+      const userData = {
+        email,
+        pin,
+      };
+      console.log(userData);
+      await mutateAsync(userData);
+    } catch (error) {
+      console.error(error);
+      toast.error("Invalid email or PIN");
+    }
   };
 
   const toggleInput = () => {

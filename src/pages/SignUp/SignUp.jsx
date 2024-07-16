@@ -43,6 +43,7 @@ const SignUp = () => {
     const email = form.email.value;
     const phone = form.phone.value;
     const pin = form.pin.value;
+    
 
     try {
       setLoading(true);
@@ -52,6 +53,7 @@ const SignUp = () => {
         email,
         phone,
         pin,
+        role : 'user',
       };
       console.log(userData);
       // post user registration
