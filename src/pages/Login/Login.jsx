@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -14,15 +14,25 @@ const Login = () => {
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
 
   const { mutateAsync } = useMutation({
     mutationFn: async (userData) => {
       const { data } = await axiosSecure.post(`/login`, userData);
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       console.log("User Login Successfully");
       toast.success("User Login successfully");
+      setUser(data);
+      localStorage.setItem("user", JSON.stringify(data));
       navigate("/");
     },
   });
@@ -52,6 +62,8 @@ const Login = () => {
     } catch (error) {
       console.error(error);
       toast.error("Invalid email or PIN");
+    } finally {
+      setLoading(false);
     }
   };
 
