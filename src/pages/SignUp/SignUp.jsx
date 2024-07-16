@@ -1,40 +1,8 @@
-import React, { useState } from "react";
-import { TbFidgetSpinner } from "react-icons/tb";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React from 'react';
 
-const Login = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location?.state || "/";
-  const [isEmail, setIsEmail] = useState(true);
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [pin, setPin] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handlePinChange = (e) => {
-    const value = e.target.value;
-    // Only allow numeric values and limit to 5 digits
-    if (/^\d{0,5}$/.test(value)) {
-      setPin(value);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    // const phone = form.phone.value;
-    const pin = form.pin.value;
-    console.log(email, pin);
-  };
-
-  const toggleInput = () => {
-    setIsEmail(!isEmail);
-  };
-
-  return (
-    <div className="flex justify-center items-center min-h-screen">
+const SignUp = () => {
+    return (
+        <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Log In</h1>
@@ -145,7 +113,7 @@ const Login = () => {
         </p>
       </div>
     </div>
-  );
+    );
 };
 
-export default Login;
+export default SignUp;
