@@ -16,9 +16,9 @@ const SignUp = () => {
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { muateAsync } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: async (userData) => {
-      const { data } = await axiosSecure.post(`/user`, userData);
+      const { data } = await axiosSecure.put(`/user`, userData);
       return data;
     },
     onSuccess: () => {
@@ -55,7 +55,7 @@ const SignUp = () => {
       };
       console.log(userData);
       // post user registration
-      await muateAsync(userData);
+      await mutateAsync(userData);
     } catch (error) {
       console.error(error);
     } finally {
