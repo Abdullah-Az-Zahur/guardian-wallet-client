@@ -44,7 +44,7 @@ const Login = () => {
         toast.error("Error fetching user data");
       }
 
-      setUser(userData?.email);
+      setUser(user);
 
       localStorage.setItem("user", JSON.stringify(user));
       navigate("/");

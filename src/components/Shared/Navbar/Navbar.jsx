@@ -2,24 +2,24 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import axios from "axios";
-import avatarImg from "../../../assets/image/user.png"
+import avatarImg from "../../../assets/image/user.png";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
+import AgentModal from "../../Modal/AgentRequestModal";
 
 const Navbar = () => {
   const axiosSecure = useAxiosSecure();
+  
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
 
-  const {user, logOut, setUser }= useAuth()
+  const { user, logOut, setUser } = useAuth();
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setCurrentUser(JSON.parse(savedUser));
     }
@@ -29,10 +29,10 @@ const Navbar = () => {
     logOut()
       .then(() => {
         // Clear user information from state and localStorage
-      setUser(null);
-      localStorage.removeItem("user");
-      // Redirect to login page
-      navigate("/login");
+        setUser(null);
+        localStorage.removeItem("user");
+        // Redirect to login page
+        navigate("/login");
       })
       .catch((error) => console.log(error));
   };
@@ -44,14 +44,17 @@ const Navbar = () => {
   };
   const modalHandler = async () => {
     console.log("I want to be a surveyor");
+    console.log(user)// Should log "function"
+
     try {
       const currentUser = {
         email: user?.email,
         role: "user",
         status: "Requested",
       };
-      const { data } = await axiosSecure.put(`/user`, currentUser);
+      const { data } = await axiosSecure.put(`/userUpdate`, currentUser);
       console.log(data);
+
       if (data.modifiedCount > 0) {
         toast.success("Success! Please wait for admin confirmation");
       } else {
@@ -95,16 +98,16 @@ const Navbar = () => {
                     onClick={() => setIsModalOpen(true)}
                     className="disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition"
                   >
-                    Become Agent
+                    Agent Request
                   </button>
                   {/* )} */}
                 </div>
                 {/* Modal */}
-                {/* <HostModal
+                <AgentModal
                   isOpen={isModalOpen}
                   closeModal={closeModal}
                   modalHandler={modalHandler}
-                /> */}
+                />
                 {/* Dropdown btn */}
                 <div
                   onClick={() => setIsOpen(!isOpen)}
