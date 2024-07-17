@@ -1,25 +1,29 @@
 import { AiOutlineMenu } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import axios from "axios";
 import avatarImg from "../../../assets/image/user.png"
 import toast from "react-hot-toast";
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
   const navigate = useNavigate();
 
-  const logOut = async () => {
-    setLoading(true);
-    await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
-      withCredentials: true,
-    });
-  };
+  const {user, logOut, setUser }= useAuth()
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+    }
+  }, [user]);
 
   const handleLogOut = () => {
     logOut()
@@ -75,14 +79,14 @@ const Navbar = () => {
                 width="100"
                 height="100"
               /> */}
-              <h2 className="font-bold text-2xl ">Survey Vista</h2>
+              <h2 className="font-bold text-2xl ">Guardian Wallet</h2>
             </Link>
             {/* Dropdown Menu */}
             <div className="relative">
               <div className="flex flex-row items-center gap-3">
-                <Link to="/allSurveys" className="font-semibold text-sm ">
+                {/* <Link to="/allSurveys" className="font-semibold text-sm ">
                   All Surveys
-                </Link>
+                </Link> */}
                 {/* Become A Host btn */}
                 <div className="hidden md:block">
                   {/* {!user && ( */}
@@ -91,7 +95,7 @@ const Navbar = () => {
                     onClick={() => setIsModalOpen(true)}
                     className="disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition"
                   >
-                    Become Surveyor
+                    Become Agent
                   </button>
                   {/* )} */}
                 </div>
@@ -107,7 +111,7 @@ const Navbar = () => {
                   className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
                 >
                   <AiOutlineMenu />
-                  <div className="hidden md:block">
+                  <div className="hidden md:block ">
                     {/* Avatar */}
                     <img
                       className="rounded-full"
@@ -130,7 +134,7 @@ const Navbar = () => {
                       Home
                     </Link>
 
-                    {user ? (
+                    {currentUser ? (
                       <>
                         <Link
                           to="/dashboard"

@@ -1,9 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosSecure } from "../../hooks/useAxiosSecure";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,8 +15,10 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+
+  // const [loading, setLoading] = useState(false);
+
+  let { user, setUser, loading, setLoading } = useAuth();
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -28,12 +32,23 @@ const Login = () => {
       const { data } = await axiosSecure.post(`/login`, userData);
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data, userData) => {
       console.log("User Login Successfully");
       toast.success("User Login successfully");
-      setUser(data);
-      localStorage.setItem("user", JSON.stringify(data));
+
+      try {
+        const res = await axiosSecure.get(`/user/${userData.email}`);
+        user = res.data;
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        toast.error("Error fetching user data");
+      }
+
+      setUser(userData?.email);
+
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/");
+      console.log(user);
     },
   });
 
@@ -50,18 +65,19 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const pin = form.pin.value;
-    console.log(email, pin);
+
     try {
       setLoading(true);
       const userData = {
         email,
         pin,
       };
-      console.log(userData);
+
       await mutateAsync(userData);
     } catch (error) {
       console.error(error);
       toast.error("Invalid email or PIN");
+      setLoading(false);
     } finally {
       setLoading(false);
     }
