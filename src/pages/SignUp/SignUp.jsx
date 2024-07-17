@@ -24,7 +24,7 @@ const SignUp = () => {
     onSuccess: () => {
       console.log("Create User Successfully");
       toast.success("User created successfully");
-      navigate("/");
+      navigate("/login");
     },
   });
 
@@ -43,7 +43,6 @@ const SignUp = () => {
     const email = form.email.value;
     const phone = form.phone.value;
     const pin = form.pin.value;
-    
 
     try {
       setLoading(true);
@@ -53,7 +52,8 @@ const SignUp = () => {
         email,
         phone,
         pin,
-        role : 'user',
+        role: "user",
+        balance: 40,
       };
       console.log(userData);
       // post user registration

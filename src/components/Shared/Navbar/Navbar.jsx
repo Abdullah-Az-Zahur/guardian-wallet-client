@@ -85,11 +85,17 @@ const Navbar = () => {
               <h2 className="font-bold text-2xl ">Guardian Wallet</h2>
             </Link>
             {/* Dropdown Menu */}
-            <div className="relative">
+            <div className="relative z-10">
               <div className="flex flex-row items-center gap-3">
                 {/* <Link to="/allSurveys" className="font-semibold text-sm ">
                   All Surveys
                 </Link> */}
+                {/* balance */}
+                <div>
+                  <span className="font-semibold text-sm">
+                    Balance: ${currentUser?.balance}
+                  </span>
+                </div>
                 {/* Become A Host btn */}
                 <div className="hidden md:block">
                   {/* {!user && ( */}
@@ -129,7 +135,7 @@ const Navbar = () => {
               </div>
               {isOpen && (
                 <div className="absolute rounded-xl shadow-md w-[40vw] md:w-[10vw] bg-white overflow-hidden right-0 top-12 text-sm">
-                  <div className="flex flex-col cursor-pointer">
+                  <div className="flex flex-col cursor-pointer ">
                     <Link
                       to="/"
                       className="block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold"

@@ -20,12 +20,12 @@ const Login = () => {
 
   let { user, setUser, loading, setLoading } = useAuth();
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedUser = localStorage.getItem("user");
+  //   if (savedUser) {
+  //     setUser(JSON.parse(savedUser));
+  //   }
+  // }, []);
 
   const { mutateAsync } = useMutation({
     mutationFn: async (userData) => {
@@ -39,6 +39,7 @@ const Login = () => {
       try {
         const res = await axiosSecure.get(`/user/${userData.email}`);
         user = res.data;
+        // 
       } catch (err) {
         console.error("Error fetching user data:", err);
         toast.error("Error fetching user data");
