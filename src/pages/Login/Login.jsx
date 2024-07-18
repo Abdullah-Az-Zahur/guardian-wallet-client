@@ -20,12 +20,7 @@ const Login = () => {
 
   let { user, setUser, loading, setLoading } = useAuth();
 
-  // useEffect(() => {
-  //   const savedUser = localStorage.getItem("user");
-  //   if (savedUser) {
-  //     setUser(JSON.parse(savedUser));
-  //   }
-  // }, []);
+ 
 
   const { mutateAsync } = useMutation({
     mutationFn: async (userData) => {
@@ -52,6 +47,13 @@ const Login = () => {
       console.log(user);
     },
   });
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, [user, setUser]);
 
   const handlePinChange = (e) => {
     const value = e.target.value;

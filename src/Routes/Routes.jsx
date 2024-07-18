@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
     element: <Dashboard></Dashboard>,
     children: [
       {
-        path: "/dashboard",
+        index: true,
         element: <Common></Common>,
       },
       // admin dashboard

@@ -9,8 +9,9 @@ import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import UpdateUserModal from "../../../../Modal/UpdateUserModal";
 
 const UserDataRow = ({ user, refetch }) => {
-  const { user: loggedInUser } = useAuth();
-  console.log(loggedInUser?.balance)
+  // const { user: loggedInUser } = useAuth();
+  const loggedInUser = localStorage.getItem('user');
+  
   const [isOpen, setIsOpen] = useState(false);
   const axiosSecure = useAxiosSecure();
   const { mutateAsync } = useMutation({

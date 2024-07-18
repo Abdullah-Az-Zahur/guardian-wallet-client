@@ -17,9 +17,9 @@ import MenuItem from "./Menu/MenuItem";
 
 
 const Sidebar = () => {
-  const { logOut } = useAuth();
+  const { logOut, user } = useAuth();
   const [isActive, setActive] = useState(false);
-  const [role, isLoading] = useRole();
+  const [role, isLoading, currentUserRole] = useRole();
   // console.log(role, isLoading);
 
   // Sidebar Responsive Handler
